@@ -5,9 +5,6 @@ import joblib
 import numpy as np
 from database import init_db, insert_record, get_all_records
 
-print("[versions]", "sklearn", sklearn.__version__, "joblib", joblib.__version__,
-      "numpy", numpy.__version__, "scipy", scipy.__version__)
-
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend communication
 
@@ -109,4 +106,5 @@ def get_history():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+
 

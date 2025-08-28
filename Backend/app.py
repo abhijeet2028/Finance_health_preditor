@@ -4,22 +4,53 @@ from flask_cors import CORS
 import joblib
 import numpy as np
 from database import init_db, insert_record, get_all_records
+from pathlib import Path
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend communication
+
+# Resolve project paths reliably
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_CANDIDATES = ["model.joblib", "model.pkl", "financial_model.joblib", "financial_model.pkl"]
+SCALER_CANDIDATES = ["scaler.joblib", "scaler.pkl", "standard_scaler.joblib", "standard_scaler.pkl"]
+
+def first_existing(base: Path, names):
+    for name in names:
+        p = base / name
+        if p.exists():
+            print(f"[artifacts] Found: {p}")
+            return p
+    print("[artifacts] Tried (no match):", [str(base / n) for n in names])
+    return None
 
 # Initialize database
 init_db()
 
 # Load the trained model and scaler
+model = None
+scaler = None
 try:
-    model = joblib.load('model.joblib')
-    scaler = joblib.load('scaler.joblib')
-    print("Model and scaler loaded successfully!")
-except:
-    print("Error loading model or scaler. Please train the model first.")
+    model_path = first_existing(BASE_DIR, MODEL_CANDIDATES)
+    scaler_path = first_existing(BASE_DIR, SCALER_CANDIDATES)
+
+    if model_path is None:
+        raise FileNotFoundError("Missing model artifact. Place it in Backend/ as model.joblib or model.pkl")
+
+    print(f"[artifacts] Loading model from: {model_path}")
+    model = joblib.load(model_path)
+
+    if scaler_path:
+        print(f"[artifacts] Loading scaler from: {scaler_path}")
+        scaler = joblib.load(scaler_path)
+    else:
+        print("[artifacts] No scaler file found. Continuing without scaler.")
+except Exception as e:
+    # Surface the real problem in Render logs
+    print(f"[artifacts] ERROR while loading artifacts: {e}")
     model = None
     scaler = None
+    
     
 @app.route("/", methods=["GET"])
 def home():
@@ -105,4 +136,5 @@ def get_history():
         return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
+
     app.run(debug=True, port=5000)

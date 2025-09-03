@@ -56,7 +56,7 @@ Frontend (React/HTML-CSS-JS)  →  Backend (Flask/FastAPI/Django)  →  ML Model
 - **Machine Learning**: Scikit-learn / Pandas / NumPy  
 - **Backend**: Flask / FastAPI (assumed)  
 - **Frontend**: React.js or HTML/CSS/JS  
-- **Visualization**: Matplotlib / Seaborn  
+- **Visualization**: Matplotlib / Seaborn 
 
 *(Update based on your actual stack)*
 
@@ -84,9 +84,6 @@ cd ../Frontend
 # If React
 npm install
 npm start
-
-# Or if plain HTML
-open index.html in browser
 ```
 
 ---
@@ -120,35 +117,34 @@ Response:
 ---
 
 ## 📂 Project Structure
+
+### Backend (`Backend/`)
 ```
-Finance_health_preditor/
-│── Backend/
-│   ├── app.py              # Backend API
-│   ├── model.pkl           # Trained ML model
-│   ├── requirements.txt    # Dependencies
-│
-│── Frontend/
-│   ├── index.html / src/   # UI code
-│
-│── dataset.csv             # Dataset used for ML training
-│── README.md               # Project documentation
+Backend/
+├── app.py                 # Main Flask application
+├── database.py            # Database operations
+├── model_training.py      # ML model training script
+├── model.joblib          # Trained ML model
+├── scaler.joblib         # Feature scaler
+├── feature_columns.joblib # Feature column names
+├── financial_data.csv     # Training dataset
+├── financial_health.db    # SQLite database
+└── requirements.txt       # Python dependencies
 ```
 
----
-
-## 🤝 Contributing
-Contributions are welcome! 🚀  
-
-1. Fork the repo  
-2. Create a new branch (`git checkout -b feature-name`)  
-3. Commit your changes (`git commit -m "Added feature"`)  
-4. Push to your branch (`git push origin feature-name`)  
-5. Open a Pull Request  
-
----
-
-## 📜 License
-This project is licensed under the **MIT License** – feel free to use, modify, and share.  
+### Frontend (`Frontend/`)
+```
+Frontend/
+├── src/
+│   ├── components/        # Reusable UI components
+│   ├── pages/            # Main application pages
+│   │   ├── InputForm.jsx # Financial data input form
+│   │   └── Dashboard.jsx # Analysis results dashboard
+│   ├── App.jsx           # Main application component
+│   └── main.jsx          # Application entry point
+├── package.json           # Node.js dependencies
+└── tailwind.config.js    # Tailwind CSS configuration
+```
 
 ---
 

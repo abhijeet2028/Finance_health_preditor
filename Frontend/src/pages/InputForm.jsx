@@ -51,7 +51,7 @@ const InputForm = () => {
     const newErrors = {};
     const numericFields = ['monthly_income', 'monthly_expenses', 'loan_emi', 'savings', 'investments'];
 
-    numericFields.forEach(field => {
+     numericFields.forEach(field => {
       const rawValue = parseIndianNumber(formData[field]);
       
       // Check for empty field
@@ -97,7 +97,7 @@ const InputForm = () => {
         return;
       }
     });
-
+    
     // Validate that income equals sum of all other fields
     const income = parseFloat(parseIndianNumber(formData.monthly_income || '0'));
     const totalExpenses = calculateTotalExpenses();
@@ -129,43 +129,6 @@ const InputForm = () => {
 
     // Format with Indian numbering system as user types
     const rawValue = parseIndianNumber(finalValue);
-    
-    // Check if monthly_income exceeds 150,000 in real-time
-    if (name === 'monthly_income' && rawValue && !isNaN(parseFloat(rawValue))) {
-      const numValue = parseFloat(rawValue);
-      if (numValue > 150000) {
-        setErrors(prev => ({
-          ...prev,
-          monthly_income: 'Monthly income cannot exceed ₹150,000'
-        }));
-        return; // Don't update the field if it exceeds the limit
-      } else if (errors.monthly_income) {
-        // Clear error if it was previously set
-        setErrors(prev => ({
-          ...prev,
-          monthly_income: ''
-        }));
-      }
-    }
-    
-    // Check if monthly_expenses exceeds 150,000 in real-time
-    if (name === 'monthly_expenses' && rawValue && !isNaN(parseFloat(rawValue))) {
-      const numValue = parseFloat(rawValue);
-      if (numValue > 150000) {
-        setErrors(prev => ({
-          ...prev,
-          monthly_expenses: 'Monthly expenses cannot exceed ₹150,000'
-        }));
-        return; // Don't update the field if it exceeds the limit
-      } else if (errors.monthly_expenses) {
-        // Clear error if it was previously set
-        setErrors(prev => ({
-          ...prev,
-          monthly_expenses: ''
-        }));
-      }
-    }
-
     if (rawValue && !isNaN(parseFloat(rawValue))) {
       finalValue = formatIndianRupee(rawValue);
     }
@@ -175,8 +138,8 @@ const InputForm = () => {
       [name]: finalValue
     }));
 
-    // Clear error when user starts typing (for other fields)
-    if (errors[name] && name !== 'monthly_income' && name !== 'monthly_expenses') {
+    // Clear error when user starts typing
+    if (errors[name]) {
       setErrors(prev => ({
         ...prev,
         [name]: ''
@@ -304,7 +267,6 @@ const InputForm = () => {
                       : 'border-blue-300 bg-white'
                   }`}
                   placeholder="1,50,000"
-                  max="150000"
                 />
               </div>
               {errors.monthly_income && (
@@ -313,53 +275,11 @@ const InputForm = () => {
                   {errors.monthly_income}
                 </div>
               )}
-              <div className="mt-1 text-xs text-blue-600">
-                Maximum allowed: ₹150,000
-              </div>
             </motion.div>
 
-            {/* Monthly Expenses Field */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="bg-gray-50 rounded-lg p-4 border border-gray-200"
-            >
-              <label htmlFor="monthly_expenses" className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
-                Monthly Expenses
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <IndianRupee className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  id="monthly_expenses"
-                  name="monthly_expenses"
-                  value={formData.monthly_expenses}
-                  onChange={handleChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-colors font-medium ${
-                    errors.monthly_expenses 
-                      ? 'border-red-500 bg-red-50' 
-                      : 'border-gray-300 bg-white'
-                  }`}
-                  placeholder="75,000"
-                  max="150000"
-                />
-              </div>
-              {errors.monthly_expenses && (
-                <div className="flex items-center mt-2 text-red-600 text-sm">
-                  <AlertCircle className="h-4 w-4 mr-1" />
-                  {errors.monthly_expenses}
-                </div>
-              )}
-              <div className="mt-1 text-xs text-gray-500">
-                Maximum allowed: ₹150,000
-              </div>
-            </motion.div>
-
-            {/* Other Distribution Fields */}
+            {/* Distribution Fields */}
             {[
+              { label: 'Monthly Expenses', name: 'monthly_expenses', placeholder: '75,000' },
               { label: 'Loan EMI Payments', name: 'loan_emi', placeholder: '25,000' },
               { label: 'Monthly Savings', name: 'savings', placeholder: '30,000' },
               { label: 'Investment Contributions', name: 'investments', placeholder: '20,000' },
@@ -368,7 +288,7 @@ const InputForm = () => {
                 key={field.name}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 * (index + 2) }}
+                transition={{ delay: 0.2 * (index + 1) }}
                 className="bg-gray-50 rounded-lg p-4 border border-gray-200"
               >
                 <label htmlFor={field.name} className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
@@ -445,7 +365,7 @@ const InputForm = () => {
               </Button>
               <Button
                 type="submit"
-                disabled={isLoading || (income > 0 && balance !== 0) || errors.monthly_income || errors.monthly_expenses}
+                disabled={isLoading || (income > 0 && balance !== 0)}
                 className="flex-1 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-md disabled:opacity-50"
               >
                 {isLoading ? (

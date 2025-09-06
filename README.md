@@ -353,10 +353,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support and questions:
-- Create an issue in the repository
-- Contact the development team
-- Check the troubleshooting section above
+## 📧 Contact
+Maintained by **Abhijeet Warale**  
+
+- 📩 Email: [abhijeet.warale28@gmail.com](mailto:abhijeet.warale28@gmail.com)  
+- 🔗 [LinkedIn](https://www.linkedin.com/in/abhijeet-warale-70886724b)  
 
 ---
 

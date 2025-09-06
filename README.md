@@ -351,8 +351,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Tailwind CSS**: For the beautiful UI components
 - **Scikit-learn**: For the machine learning capabilities
 
-## 📞 Support
-
 ## 📧 Contact
 Maintained by **Abhijeet Warale**  
 
